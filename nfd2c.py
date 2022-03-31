@@ -23,9 +23,9 @@ inputs = []
 wrongInputs = []
 
 items = []
-itemDir  = False
-itemName = ''
-bItem    = True
+item_bDir = False
+item_Name = ''
+bItem     = True
 
 bRecursive = False
 bRename    = False
@@ -50,7 +50,7 @@ duplications = []
 def print_msg(s):
     global bItem
     if bItem:
-        print('{1}\n{0}\n{1}'.format(itemName,'-'*30))
+        print('{1}\n{0}\n{1}'.format(item_Name,'-'*30))
         bItem = False
     print(s)
 
@@ -98,10 +98,10 @@ if not items:
     sys.exit(0)
 
 for item in items:
-    itemDir  = item[0]
-    itemName = item[1]
+    item_bDir  = item[0]
+    item_Name = item[1]
 
-    if itemDir:
+    if item_bDir:
         bDir = True
         bFile = True
     else:
@@ -129,21 +129,21 @@ for item in items:
     # 파일
     if bFile:
         # 입력 디렉토리
-        if itemDir:
+        if item_bDir:
             if bRecursive:
                 # 하위 디렉토리 포함
-                for p, ds, fs in os.walk(itemName):
+                for p, ds, fs in os.walk(item_Name):
                     for f in fs:
                         macs.append((p,f))
             else:
                 # 하위 디렉토리 포함 안 함
-                for p, ds, fs in os.walk(itemName):
+                for p, ds, fs in os.walk(item_Name):
                     for f in fs:
                         macs.append((p,f))
                     break
         else:
             # 입력 파일
-                macs.append(os.path.split(itemName))
+                macs.append(os.path.split(item_Name))
         if macs:
             # 파일 NFD 만 선택
             for mac in macs:
@@ -167,12 +167,12 @@ for item in items:
     if bDir:
         if bRecursive:
             # 하위 디렉토리 포함
-            for p, ds, fs in os.walk(itemName):
+            for p, ds, fs in os.walk(item_Name):
                 for d in ds:
                     macDirs.append((p,d))
         else:
             # 하위 디렉토리 포함 안 함
-            for p, ds, fs in os.walk(itemName):
+            for p, ds, fs in os.walk(item_Name):
                 for d in ds:
                     macDirs.append((p,d))
                 break
@@ -201,7 +201,7 @@ for item in items:
             print_msg('\n'.join(msg))
         # 입력 디렉토리 NFD to NFC 변환
         if bChangeInputDir:
-            if currentDir.find(os.path.abspath(itemName)) + 1:
+            if currentDir.find(os.path.abspath(item_Name)) + 1:
                 # 현재 디렉토리가 입력 디렉토리에 있을 경우 출력만 함
                 currentDir_p, currentDir_d = os.path.split(currentDir)
                 win = unicodedata.normalize('NFC', currentDir_d)
@@ -210,14 +210,14 @@ for item in items:
                     print_msg(msg)
             else:
                 # 입력 디렉토리 NFD to NFC 변환
-                p, d = os.path.split(itemName)
+                p, d = os.path.split(item_Name)
                 win = unicodedata.normalize('NFC', d)
                 if d != win:
                     dirNFC = os.path.join(p,win)
                     if bRename:
-                        msg = '[C] *{:14}  {}'.format(dirNFC,os.path.join(p,itemName))
+                        msg = '[C] *{:14}  {}'.format(dirNFC,os.path.join(p,item_Name))
                     else:
-                        msg = '*{:14}  {}'.format(dirNFC,os.path.join(p,itemName))
+                        msg = '*{:14}  {}'.format(dirNFC,os.path.join(p,item_Name))
                     print_msg(msg)
                     if bRename:
                         # NFD to NFC 변환 적용
