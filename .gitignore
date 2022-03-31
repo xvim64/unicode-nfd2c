@@ -1,1 +1,4 @@
 dist/
+pypi/
+pypi-nfd2c/
+pypi-unicode-nfd2c/
